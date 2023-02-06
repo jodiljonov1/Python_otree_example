@@ -1,0 +1,204 @@
+{{ block title }}
+    Investment Decision Tasks
+{{ endblock }}
+{{ block content }}
+
+<style>
+    .slidecontainer {
+      width: 100%;
+    }
+
+    .slider {
+      -webkit-appearance: none;
+      width: 100%;
+      height: 10px;
+      border-radius: 5px;
+      background: #d3d3d3;
+      outline: none;
+      opacity: 0.7;
+      -webkit-transition: .2s;
+      transition: opacity .2s;
+    }
+
+    .slider:hover {
+      opacity: 1;
+    }
+
+    .slider_thumb::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      background: red;
+      cursor: pointer;
+    }
+
+    .slider_thumb_none::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 20px;
+      height: 0px;
+      border-radius: 50%;
+      background: red;
+      cursor: pointer;
+    }
+
+    .slider::-moz-range-thumb {
+      width: 25px;
+      height: 25px;
+      border-radius: 50%;
+      background: #04AA6D;
+      cursor: pointer;
+    }
+    .value-spans {
+     display:flex;
+     justify-content: space-between;
+    }
+
+
+</style>
+
+<body style="position: absolute; width: 100%">
+    {{ formfield_errors 'today' }}
+    {{ formfield_errors 'tomorrow_high' }}
+    {{ formfield_errors 'tomorrow_low' }}
+    {{ formfield_errors 'savings' }}
+    <br>
+    <table style="width:100%; text-align: center">
+        <tr>
+            <th id="a1" style="text-align: left">  Period 1: ${{today}}</th>
+            <th></th>
+            <th id="a2" style="text-align: right">Period 2: ${{tomorrow_low}} or ${{tomorrow_high}}  </th>
+        </tr>
+    </table>
+    <div class="slidecontainer" id="alla">
+       <div class="value-spans">
+          <th><span id="left-span"></span></th>
+          &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp <p></p><p></p><p></p><p></p><p></p><p></p><p></p><p></p>&nbsp &nbsp &nbsp           &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp
+          &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp
+          <th><span id="right-span_high"> </span></th>
+        </div>
+        <input type="range" min="-20" max="20" step="2" value="0" class="slider slider_thumb_none" id="myRange">
+        <input type="hidden" value="0" id="today" name="today" >
+        <input type="hidden" value="0" id="tomorrow_high" name="tomorrow_high">
+        <input type="hidden" value="0" id="tomorrow_low" name="tomorrow_low">
+        <input type="hidden" value="0" id="savings" name="savings">
+
+
+    </div>
+    <p><span id="clicking"> Click the gray bars to reveal the sliders.</span></p>
+    <table style="width:100%" >
+        <tr>
+            <td id="result" style="text-align:center"></td>
+        </tr>
+    </table>
+    <br>
+    <table style="width:100%" >
+        <tr>
+            <td id="therefore1" style="text-align: center"></td>
+        </tr>
+    </table>
+
+    <table style="width: 100%">
+        <br>
+        <tr>
+            <td id="therefore2" style="width: 50%; text-align: center"></td>
+            <td id="therefore3" style="width: 50%; text-align: center"></td>
+        </tr>
+    </table>
+
+    <br>
+
+    <script>
+        let value = 0;
+        $(document).ready(function() {
+          $('.slider').on('input', function () {
+            $(".slider").removeClass("slider_thumb_none").addClass("slider_thumb");
+            value = $(".slider").val();
+            return_high = +{{tomorrow_high}} + +value;
+            return_low = +{{tomorrow_high}}  - +20 + +value;
+            return_today  = +{{today}} - +value;
+            result = value;
+            savings_decision = value;
+            today = {{today}}
+            tomorrow_high = {{tomorrow_high}}
+            tomorrow_low = {{tomorrow_low}}
+
+            $("#left-span").html(`Period 1: $${return_today} `);
+            $("#right-span_high").html(` Period 2: $${return_high} or $${return_low}`);
+            $("#result").html(`Ihre Wahl: Sie sparen $${result}`);
+            $("#therefore1").html(`<strong>Damit: Umverteilte Mindestauszahlung und Auszahlung aus den Ratselspielen</strong <br>`);
+            $("#therefore2").html(`<strong>heute:</strong> <br>$${return_today}  &nbsp`);
+            $("#therefore3").html(`<strong>in zwei Wochen:</strong <br> Mit einer 50.0%-Wahrscheinlichkeit $${return_high} <br> und <br> mit einer 50.0%-Wahrscheinlichkeit $${return_low}`);
+            $("#savings").val(savings_decision);
+            $("#today").val(today);
+            $("#tomorrow_high").val(tomorrow_high);
+            $("#tomorrow_low").val(tomorrow_low);
+          });
+        });
+
+    </script>
+
+<script>
+setTimeout(() => {
+  const box = document.getElementById('a1');
+    box.style.display = 'none';
+}, 2000);
+setTimeout(() => {
+  const box = document.getElementById('a2');
+    box.style.display = 'none';
+}, 5000);
+</script>
+
+<script type="text/javascript">
+  $(document).ready(function(){
+    $('#a2').hide().delay(1998).fadeIn('slow');
+  });
+</script>
+
+<script type="text/javascript">
+  $(document).ready(function(){
+    $('#alla').hide().delay(5002).fadeIn('slow');
+    $('#clicking').hide().delay(5002).fadeIn('slow');
+    $('#result_words').hide().delay(5002).fadeIn('slow');
+    $('#next_button').hide().delay(500000000001).fadeIn('slow');
+    $('#sisi').hide().delay(500000000001).fadeIn('slow');
+
+
+  });
+</script>
+
+
+<script>
+const alla = document.getElementById('myRange');
+alla.addEventListener('click', () => {
+  next_button.style.display = 'block';
+});
+</script>
+
+<script>
+const res = document.getElementById('myRange');
+res.addEventListener('click', () => {
+  result_words.style.display = 'block';
+});
+</script>
+
+<script>
+const hid = document.getElementById('myRange');
+hid.addEventListener('click', () => {
+  clicking.style.display = 'none';
+});
+</script>
+
+<br>
+
+<div>
+    <p></p><span id="next_button">
+        {{ next_button }}
+    </p></span>
+</div>
+</body>
+{{ endblock }}
+
+
